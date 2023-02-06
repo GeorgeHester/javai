@@ -1,0 +1,13 @@
+[package]
+name = "javai"
+version = "0.1.0"
+description = ""
+authors = ["NightFoxDev"]
+license = "MPL-2.0"
+license-file = "LICENSE"
+edition = "2021"
+
+[dependencies]
+regex = "1"
+crossterm = "0.26.0"
+terminal-menu = "2.0.5"
