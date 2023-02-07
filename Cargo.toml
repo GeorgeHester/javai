@@ -3,7 +3,6 @@ name = "javai"
 version = "0.1.0"
 description = ""
 authors = ["NightFoxDev"]
-license = "MPL-2.0"
 license-file = "LICENSE"
 edition = "2021"
 

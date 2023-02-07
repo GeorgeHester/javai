@@ -1,9 +1,0 @@
-javag compile
-javag run <argumnets...>
-javag clean
-
-.javag (Configuratin file)
-
-set output_directory="bin" (Default)
-set source_directory="src" (Default)
-set

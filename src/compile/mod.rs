@@ -11,6 +11,7 @@ use std::path::PathBuf;
 
 pub fn read_directory(directory: PathBuf) -> Result<Vec<String>, String>
 {
+    let mut output_files: Vec<String> = Vec::new();
     let files: io::Result<ReadDir> = fs::read_dir(&directory);
 
     if files.is_err()
@@ -29,7 +30,6 @@ pub fn read_directory(directory: PathBuf) -> Result<Vec<String>, String>
     };
 
     let files_unwrapped: ReadDir = files.unwrap();
-    let mut output_files: Vec<String> = Vec::new();
 
     for file in files_unwrapped
     {
@@ -39,8 +39,9 @@ pub fn read_directory(directory: PathBuf) -> Result<Vec<String>, String>
         };
 
         let file_unwrapped: DirEntry = file.unwrap();
+        let file_path: PathBuf = file_unwrapped.path();
 
-        if file_unwrapped.path().is_dir()
+        if file_path.is_dir()
         {
             let sub_files: Result<Vec<String>, String> = read_directory(file_unwrapped.path());
 
@@ -54,9 +55,8 @@ pub fn read_directory(directory: PathBuf) -> Result<Vec<String>, String>
             output_files.append(&mut sub_files_unwrapped);
         };
 
-        if file_unwrapped.path().is_file()
+        if file_path.is_file()
         {
-            let file_path: PathBuf = file_unwrapped.path();
             let file_path_string: Option<&str> = file_path.to_str();
 
             if file_path_string.is_some()
@@ -100,67 +100,3 @@ pub fn get_source_files() -> Result<Vec<String>, String>
 
     Ok(files_unwrapped)
 }
-
-/*
-pub fn get_source_files() -> Result<Vec<&'static str>, String>
-{
-    /* Get the path of the current directory of the terminal window */
-    let current_directory_path: std::io::Result<std::path::PathBuf> = std::env::current_dir();
-
-    /* Check if the program was able to access the path of the current terminal window */
-    if current_directory_path.is_err()
-    {
-        panic!("Error: Could not access current directory");
-    };
-
-    /* Get the list of files currently in the terminal path */
-    let current_directory_files: std::io::Result<std::fs::ReadDir> =
-        std::fs::read_dir(current_directory_path.unwrap());
-
-    /* Check if the program was able t access the list of files in the terminals path */
-    if current_directory_files.is_err()
-    {
-        panic!("Error: Could not read the current directory");
-    };
-
-    //let java_regex: Regex = Regex::new(r"(?i)^.+\.java$").unwrap();
-    //let mut source_files: Vec<&str> = Vec::new();
-
-    let source_files: Vec<&str> = Vec::new();
-
-    let files: std::fs::ReadDir = current_directory_files.unwrap();
-
-    for file_wrapped in files
-    {
-        if file_wrapped.is_err()
-        {
-            continue;
-        };
-
-        let file: std::fs::DirEntry = file_wrapped.unwrap();
-        let file_path: std::path::PathBuf = file.path();
-
-        if file_path.extension().unwrap() == "java"
-        {
-            let file_path_string = file_path.
-        }
-    }
-
-    /*for i in 0..files.count()
-    {
-        let file: std::option::Option<std::io::Result<std::fs::DirEntry>> = files.nth(i);
-    }*/
-
-    /*for file in  {
-        let file_path: &str = file.unwrap().path().as_path().to_str().unwrap();
-
-        if java_regex.is_match(file_path) {
-            source_files.push(file_path);
-        }
-
-        println!("File: {}", file.unwrap().path().display());
-    }*/
-
-    Ok(source_files)
-}
-*/
